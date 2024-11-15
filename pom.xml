@@ -7,11 +7,24 @@
     <groupId>com.fin.sight</groupId>
     <artifactId>FinSight</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>fin-sight-common</module>
+        <module>fin-sight-database</module>
+        <module>fin-sight-api</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.version>3.3.1</spring.version>
     </properties>
-    
+    <dependencies>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
+        </dependency>
+    </dependencies>
 </project>
