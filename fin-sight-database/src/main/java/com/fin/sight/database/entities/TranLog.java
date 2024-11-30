@@ -1,9 +1,6 @@
 package com.fin.sight.database.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -24,11 +21,11 @@ public class TranLog {
     private int month;
     @Column(name = "date", nullable = false)
     private String date;
-    @Column(name = "account_name", nullable = false)
-    private String accountName;
+    @Column(name = "account_id", nullable = false)
+    private String accountId;
     @Column(name = "txn_category", nullable = false)
     private String txnCategory;
-    @Column(name = "txn_sub_category", nullable = false)
+    @Column(name = "txn_sub_category")
     private String txnSubCategory;
     @Column(name = "txn_nature", nullable = false)
     private String txnNature;
@@ -44,4 +41,10 @@ public class TranLog {
     private LocalDateTime createTime;
     @UpdateTimestamp
     private LocalDateTime updateTime;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_guid", referencedColumnName = "guid", insertable = false, updatable = false)
+    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_id", referencedColumnName = "account_id", insertable = false, updatable = false)
+    private Accounts account;
 }
