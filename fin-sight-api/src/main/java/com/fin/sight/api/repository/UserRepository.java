@@ -1,6 +1,6 @@
-package com.fin.sight.database.repository;
+package com.fin.sight.api.repository;
 
-import com.fin.sight.database.entities.User;
+import com.fin.sight.api.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

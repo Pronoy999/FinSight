@@ -1,4 +1,4 @@
-package com.fin.sight.database.entities;
+package com.fin.sight.api.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class Accounts {
     @Id
     @Column(name = "account_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long accountId;
     @Column(name = "account_name", nullable = false)
     private String accountName;
@@ -21,9 +22,9 @@ public class Accounts {
     @Column(name = "user_guid", nullable = false)
     private String userGuid;
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime created;
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private LocalDateTime updated;
     @ManyToOne
     @JoinColumn(name = "user_guid", referencedColumnName = "guid", insertable = false, updatable = false)
     private User user;

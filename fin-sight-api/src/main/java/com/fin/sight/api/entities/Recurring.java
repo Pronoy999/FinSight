@@ -1,4 +1,4 @@
-package com.fin.sight.database.entities;
+package com.fin.sight.api.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class Recurring {
     @Id
     @Column(name = "recurring_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "account_id", nullable = false)
     private long accountId;
@@ -29,9 +30,9 @@ public class Recurring {
     @Column(name = "estimated_amount", nullable = false)
     private String estimatedAmount;
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime created;
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private LocalDateTime updated;
     @ManyToOne
     @JoinColumn(name = "account_id", referencedColumnName = "account_id", insertable = false, updatable = false)
     private Accounts accounts;

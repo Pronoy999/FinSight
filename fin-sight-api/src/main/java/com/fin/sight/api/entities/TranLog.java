@@ -1,4 +1,4 @@
-package com.fin.sight.database.entities;
+package com.fin.sight.api.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Data
 public class TranLog {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(name = "user_guid", nullable = false)
     private String userGuid;
@@ -38,9 +39,9 @@ public class TranLog {
     @Column(name = "actual_amount", nullable = false)
     private float actualAmount;
     @CreationTimestamp
-    private LocalDateTime createTime;
+    private LocalDateTime created;
     @UpdateTimestamp
-    private LocalDateTime updateTime;
+    private LocalDateTime updated;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_guid", referencedColumnName = "guid", insertable = false, updatable = false)
     private User user;

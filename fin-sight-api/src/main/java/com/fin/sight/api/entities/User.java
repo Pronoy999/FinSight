@@ -1,4 +1,4 @@
-package com.fin.sight.database.entities;
+package com.fin.sight.api.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +28,7 @@ public class User {
     @Column(name = "age", nullable = false)
     private int age;
     @CreationTimestamp
-    private LocalDateTime createTime;
+    private LocalDateTime created;
     @UpdateTimestamp
-    private LocalDateTime updateTime;
+    private LocalDateTime updated;
 }
