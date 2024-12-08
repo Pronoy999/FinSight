@@ -4,6 +4,9 @@ import com.fin.sight.api.service.UserService;
 import com.fin.sight.common.Constants;
 import com.fin.sight.common.dto.CreateUserRequest;
 import com.fin.sight.common.dto.CreateUserResponse;
+import com.fin.sight.common.dto.LoginUserRequest;
+import com.fin.sight.common.dto.LoginUserResponse;
+import com.fin.sight.common.exceptions.InvalidCredentialsException;
 import com.fin.sight.common.exceptions.InvalidRequestException;
 import com.fin.sight.common.utils.ResponseGenerator;
 import com.fin.sight.common.utils.Validator;
@@ -31,15 +34,35 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody CreateUserRequest request) {
         try {
-            Validator.validateUserDetails(request);
+            Validator.validateUserRegisterDetails(request);
             CreateUserResponse response = userService.registerUser(request);
             if (Objects.nonNull(response)) {
                 return ResponseGenerator.generateUserRegisterResponse(response.guid(), response.jwt());
-            } else {
-                return ResponseGenerator.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
             }
+            return ResponseGenerator.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
         } catch (InvalidRequestException e) {
+            log.error("Error while registering user: ", e);
             return ResponseGenerator.generateFailureResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            return ResponseGenerator.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, Constants.GENERIC_ERROR_MESSAGE);
+        }
+    }
+
+    @PostMapping(path = Constants.LOGIN_PATH)
+    public ResponseEntity<?> loginUser(@RequestBody LoginUserRequest request) {
+        try {
+            Validator.validateLoginUserRequest(request);
+            LoginUserResponse response = userService.loginUser(request);
+            if (Objects.nonNull(response)) {
+                return ResponseGenerator.generateUserRegisterResponse(response.userId(), response.jwtToken());
+            }
+            return ResponseGenerator.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+        } catch (InvalidCredentialsException | InvalidRequestException e) {
+            log.error("Error while login user: ", e);
+            return ResponseGenerator.generateFailureResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            log.error("Error while login user: ", e);
+            return ResponseGenerator.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, Constants.GENERIC_ERROR_MESSAGE);
         }
     }
 }

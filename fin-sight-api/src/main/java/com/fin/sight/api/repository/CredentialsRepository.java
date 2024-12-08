@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface CredentialsRepository extends JpaRepository<Credentials, Integer> {
     List<Credentials> findByEmailIdAndIsActive(String emailId, boolean active);
+
+    Credentials findByEmailIdAndPasswordAndIsActive(String emailId, String password, boolean active);
 }
