@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController("healthCheckController")
 @RequestMapping(path = Constants.HEALTH_CHECK_API_PATH)
-@Slf4j
 public class HealthCheckController {
     @GetMapping
     public ResponseEntity<Void> pingCheck() {

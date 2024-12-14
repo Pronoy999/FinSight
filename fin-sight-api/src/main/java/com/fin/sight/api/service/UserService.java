@@ -1,5 +1,9 @@
 package com.fin.sight.api.service;
 
+import com.fin.sight.api.entities.Credentials;
+import com.fin.sight.api.entities.User;
+import com.fin.sight.api.repository.CredentialsRepository;
+import com.fin.sight.api.repository.UserRepository;
 import com.fin.sight.common.dto.CreateUserRequest;
 import com.fin.sight.common.dto.CreateUserResponse;
 import com.fin.sight.common.dto.LoginUserRequest;
@@ -7,20 +11,14 @@ import com.fin.sight.common.dto.LoginUserResponse;
 import com.fin.sight.common.exceptions.InvalidCredentialsException;
 import com.fin.sight.common.exceptions.InvalidRequestException;
 import com.fin.sight.common.utils.GuidUtils;
-import com.fin.sight.api.entities.Credentials;
-import com.fin.sight.api.entities.User;
-import com.fin.sight.api.repository.CredentialsRepository;
-import com.fin.sight.api.repository.UserRepository;
 import com.fin.sight.common.utils.JwtUtils;
 import jakarta.validation.constraints.NotNull;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 
 @Service
-@Slf4j
 public class UserService {
     private final UserRepository userRepository;
     private final CredentialsRepository credentialsRepository;

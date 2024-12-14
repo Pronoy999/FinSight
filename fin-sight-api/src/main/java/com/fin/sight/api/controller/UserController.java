@@ -26,6 +26,7 @@ import java.util.Objects;
 public class UserController {
 
     private final UserService userService;
+    private final String TAG = UserController.class.getName();
 
     public UserController(UserService userService) {
         this.userService = userService;
