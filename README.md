@@ -1,3 +1,4 @@
+![example_workflow](https://github.com/Pronoy999/FinSight/blob/main/.github/workflows/main.yml/badge.svg)
 # Financial Tracker Application  
 
 Welcome to the **Financial Tracker Application**! This application helps you manage your personal finances by tracking income, expenses, and providing insightful analytics to better understand your financial habits.  
