@@ -1,0 +1,203 @@
+#storageCentralMainContainer {
+    display: flex;
+    //background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3)),url(../../assets/images/banner.jpg);
+    //background-image: url(../../assets/images/banner.jpg);
+    width: 100%;
+    height: 100vh;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+
+    .formWrapperContainer {
+        width: 40%;
+        max-width: 400px;
+        padding: 30px;
+        background: white;
+        margin: auto 40px;
+        border-radius: 12px;
+        box-shadow: -1px -1px 10px -2px rgb(0 0 0 / 50%);
+    }
+
+    .mainHeader {
+        color: white;
+        padding: 0 50px;
+        width: 100%;
+        font-size: 36px;
+        line-height: 40px;
+        text-shadow: 6px 6px 4px black;
+        margin: auto 0;
+
+        span {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-family: cursive;
+            font-size: 40px;
+            padding: 0 12px;
+        }
+    }
+}
+
+.separator {
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    margin: 12px 0;
+}
+
+.separator::before,
+.separator::after {
+    position: absolute;
+    width: 140px;
+    height: 1px;
+    top: 24px;
+    background-color: #aaa;
+    content: "";
+}
+
+.separator::before {
+    left: 0;
+}
+
+.separator::after {
+    right: 0;
+}
+
+.registerFormSideNav {
+    width: 500px;
+}
+
+.registerFormSlider {
+    position: absolute;
+    top: 0;
+    min-height: 100vh;
+    height: 100%;
+    //right: 0;
+    box-shadow: 0px 2px 8px #0000003d;
+}
+
+//Design2
+.container {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    max-width: 100%;
+    margin: auto 40px;
+    height: 68%;
+}
+
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+
+.sign-in-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.container.right-panel-active .sign-in-container {
+    transform: translateX(100%);
+    display: none;
+}
+
+.sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
+}
+
+@keyframes show {
+    0%,
+    49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.container.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+}
+
+.overlay {
+    //background: #FF416C;
+   background: linear-gradient(67.6deg, rgb(225, 242, 254) -2.8%, rgb(193, 224, 250) 44.6%, rgb(19, 116, 197) 102.4%);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: 0 0;
+    color: #ffffff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+.container.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
