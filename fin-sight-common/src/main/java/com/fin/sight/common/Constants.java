@@ -5,6 +5,7 @@ public class Constants {
     public static final String USER_PATH = "/user";
     public static final String LOGIN_PATH = "/login";
     public static final String ACCOUNT_PATH = "/account";
+    public static final String TXN_CATEGORY_PATH = "/txn-category";
 
     public static final String GENERIC_ERROR_MESSAGE = "Something went wrong";
     public static final String USER_TOKEN_HEADER = "user-token";

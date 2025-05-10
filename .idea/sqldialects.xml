@@ -6,5 +6,7 @@
     <file url="file://$PROJECT_DIR$/fin-sight-database/src/main/java/com/fin/sight/database/sql/tbl_recurring.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/fin-sight-database/src/main/java/com/fin/sight/database/sql/tbl_tran_log.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/fin-sight-database/src/main/java/com/fin/sight/database/sql/tbl_user.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/fin-sight-database/src/main/java/com/fin/sight/database/sql/txn_category.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/fin-sight-database/src/main/java/com/fin/sight/database/sql/txn_sub_category.sql" dialect="PostgreSQL" />
   </component>
 </project>

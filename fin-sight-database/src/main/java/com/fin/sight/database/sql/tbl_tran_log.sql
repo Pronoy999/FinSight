@@ -1,33 +1,56 @@
-alter database fin_sight set search_path to fin_sight;
-drop sequence if exists tbl_tran_log_seq cascade;
-create sequence tbl_tran_log_seq;
-drop table if exists tbl_tran_log;
-create table if not exists tbl_tran_log
+-- Ensure you’re using the correct schema
+ALTER DATABASE fin_sight SET search_path TO fin_sight;
+
+-- Drop sequence and table if they exist
+DROP SEQUENCE IF EXISTS tbl_tran_log_seq CASCADE;
+CREATE SEQUENCE tbl_tran_log_seq;
+
+DROP TABLE IF EXISTS tbl_tran_log;
+
+-- Updated table definition
+CREATE TABLE IF NOT EXISTS tbl_tran_log
 (
-    id               integer primary key     default nextval('tbl_tran_log_seq'),
-    user_guid        varchar(1000)  not null,
-    year             integer        not null,
-    month            integer        not null,
-    date             integer        not null,
-    account_id       integer        not null,
-    txn_category     varchar(300)   not null,
-    txn_sub_category varchar(300),
-    txn_nature       varchar(300)   not null,
-    txn_frequency    varchar(50)    not null,
-    transfer_type    varchar(10)    not null,
-    txn_amount       decimal(10, 2) not null,
-    created          timestamp      not null default current_timestamp,
-    updated          timestamp      not null default current_timestamp
+    id                  INTEGER PRIMARY KEY     DEFAULT nextval('tbl_tran_log_seq'),
+    user_guid           VARCHAR(1000)  NOT NULL,
+    year                INTEGER        NOT NULL,
+    month               INTEGER        NOT NULL,
+    date                INTEGER        NOT NULL,
+    account_id          INTEGER        NOT NULL,
+    txn_category_id     INTEGER        NOT NULL,
+    txn_sub_category_id INTEGER,
+    txn_frequency       VARCHAR(50)    NOT NULL,
+    transfer_type       VARCHAR(10)    NOT NULL,
+    txn_amount          DECIMAL(10, 2) NOT NULL,
+    created             TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated             TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Foreign key constraints
+
+-- User GUID
 ALTER TABLE tbl_tran_log
     ADD CONSTRAINT fk_user_guid
         FOREIGN KEY (user_guid)
             REFERENCES fin_sight.tbl_user (guid)
             ON DELETE CASCADE;
 
-ALTER table tbl_tran_log
-    add constraint fk_account_id
-        foreign key (account_id)
-            references fin_sight.tbl_accounts (account_id)
-            on delete cascade;
+-- Account ID
+ALTER TABLE tbl_tran_log
+    ADD CONSTRAINT fk_account_id
+        FOREIGN KEY (account_id)
+            REFERENCES fin_sight.tbl_accounts (account_id)
+            ON DELETE CASCADE;
+
+-- Txn Category
+ALTER TABLE tbl_tran_log
+    ADD CONSTRAINT fk_txn_category
+        FOREIGN KEY (txn_category_id)
+            REFERENCES txn_category (id)
+            ON DELETE CASCADE;
+
+-- Txn Subcategory
+ALTER TABLE tbl_tran_log
+    ADD CONSTRAINT fk_txn_sub_category
+        FOREIGN KEY (txn_sub_category_id)
+            REFERENCES txn_sub_category (id)
+            ON DELETE CASCADE;
