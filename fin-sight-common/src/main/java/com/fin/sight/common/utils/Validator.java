@@ -1,5 +1,6 @@
 package com.fin.sight.common.utils;
 
+import com.fin.sight.common.dto.CreateAccountRequest;
 import com.fin.sight.common.dto.CreateUserRequest;
 import com.fin.sight.common.dto.LoginUserRequest;
 import com.fin.sight.common.exceptions.InvalidRequestException;
@@ -40,6 +41,20 @@ public class Validator {
         }
         if (request.emailId().length() < 5 || request.password().length() < 5) {
             throw new InvalidRequestException("Please enter a valid email id & password");
+        }
+    }
+
+    /**
+     * Method to validate the account request.
+     *
+     * @param request: the account request to validate.
+     */
+    public static void validateAccountRequest(CreateAccountRequest request) {
+        if (Objects.isNull(request)) {
+            throw new InvalidRequestException("Request body can't be empty");
+        }
+        if (Stream.of(request.accountName(), request.accountType()).anyMatch(Objects::isNull)) {
+            throw new InvalidRequestException("Mandatory fields can't be empty");
         }
     }
 }

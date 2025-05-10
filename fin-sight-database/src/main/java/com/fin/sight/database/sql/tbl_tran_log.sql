@@ -15,8 +15,7 @@ create table if not exists tbl_tran_log
     txn_nature       varchar(300)   not null,
     txn_frequency    varchar(50)    not null,
     transfer_type    varchar(10)    not null,
-    estimated_amount decimal(10, 2) not null,
-    actual_amount    decimal(10, 2) not null,
+    txn_amount       decimal(10, 2) not null,
     created          timestamp      not null default current_timestamp,
     updated          timestamp      not null default current_timestamp
 );

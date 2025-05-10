@@ -34,10 +34,8 @@ public class TranLog {
     private String txnFrequency;
     @Column(name = "transfer_type", nullable = false)
     private String transferType;
-    @Column(name = "estimated_amount", nullable = false)
-    private float estimatedAmount;
-    @Column(name = "actual_amount", nullable = false)
-    private float actualAmount;
+    @Column(name = "txn_amount", nullable = false)
+    private float txnAmount;
     @CreationTimestamp
     private LocalDateTime created;
     @UpdateTimestamp

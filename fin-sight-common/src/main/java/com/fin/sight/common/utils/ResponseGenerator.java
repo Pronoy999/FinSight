@@ -36,4 +36,15 @@ public class ResponseGenerator {
             default -> ResponseEntity.status(status).body(response);
         };
     }
+
+    /**
+     * Method to generate a successful response.
+     *
+     * @param response: the response body.
+     * @param status:   the HTTP status code.
+     * @return the ResponseEntity.
+     */
+    public static ResponseEntity<?> generateSuccessResponse(@NotNull final Object response, HttpStatus status) {
+        return ResponseEntity.status(status).body(response);
+    }
 }
