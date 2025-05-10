@@ -1,5 +1,6 @@
 package com.fin.sight.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -54,13 +55,16 @@ public class TranLog {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id", referencedColumnName = "account_id", insertable = false, updatable = false)
+    @JsonIgnore
     private Accounts account;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "txn_category_id", referencedColumnName = "id", nullable = false)
+    @JsonIgnore
     private TxnCategory txnCategory;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     @JoinColumn(name = "txn_sub_category_id", referencedColumnName = "id", nullable = false)
     private TxnSubCategory txnSubCategory;
 }

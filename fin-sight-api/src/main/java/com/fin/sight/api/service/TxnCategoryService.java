@@ -5,6 +5,7 @@ import com.fin.sight.api.entities.TxnSubCategory;
 import com.fin.sight.api.repository.TxnCategoryRepository;
 import com.fin.sight.api.repository.TxnSubCategoryRepository;
 import jakarta.annotation.PostConstruct;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,5 +39,32 @@ public class TxnCategoryService {
 
     public List<TxnSubCategory> getSubCategories(long categoryId) {
         return txnSubCategoryMap.get(categoryId);
+    }
+
+    /**
+     * Get the Txn Category by ID
+     *
+     * @param categoryId: the ID of the category
+     * @return TxnCategory: the category object
+     */
+    public TxnCategory getTxnCategoryById(@NotNull final long categoryId) {
+        return txnCategories.stream()
+                .filter(category -> category.getId() == categoryId)
+                .findFirst()
+                .orElse(null);
+    }
+
+    /**
+     * Get the Txn Sub Category by ID
+     *
+     * @param subCategoryId: the ID of the sub-category
+     * @return TxnSubCategory: the sub-category object
+     */
+    public TxnSubCategory getTxnSubCategoryById(@NotNull final long subCategoryId) {
+        return txnSubCategoryMap.values().stream()
+                .flatMap(List::stream)
+                .filter(subCategory -> subCategory.getId() == subCategoryId)
+                .findFirst()
+                .orElse(null);
     }
 }
