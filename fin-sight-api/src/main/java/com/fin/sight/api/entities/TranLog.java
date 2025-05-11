@@ -21,20 +21,23 @@ public class TranLog {
     @Column(name = "user_guid", nullable = false)
     private String userGuid;
 
-    @Column(name = "year", nullable = false)
-    private int year;
+    @Column(nullable = false)
+    private Integer year;
 
-    @Column(name = "month", nullable = false)
-    private int month;
+    @Column(nullable = false)
+    private Integer month;
 
-    @Column(name = "date", nullable = false)
-    private int date;
+    @Column(nullable = false)
+    private Integer date;
 
     @Column(name = "account_id", nullable = false)
-    private int accountId;
+    private Integer accountId;
 
     @Column(name = "txn_frequency", nullable = false)
     private String txnFrequency;
+
+    @Column(name = "recurring_id")
+    private Long recurringId;
 
     @Column(name = "transfer_type", nullable = false)
     private String transferType;
@@ -48,6 +51,7 @@ public class TranLog {
     @UpdateTimestamp
     private LocalDateTime updated;
 
+    // Relationships
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_guid", referencedColumnName = "guid", insertable = false, updatable = false)
@@ -60,11 +64,14 @@ public class TranLog {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "txn_category_id", referencedColumnName = "id", nullable = false)
-    @JsonIgnore
     private TxnCategory txnCategory;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonIgnore
-    @JoinColumn(name = "txn_sub_category_id", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "txn_sub_category_id", referencedColumnName = "id")
     private TxnSubCategory txnSubCategory;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recurring_id", referencedColumnName = "recurring_id", insertable = false, updatable = false)
+    @JsonIgnore
+    private Recurring recurring;
 }

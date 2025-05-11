@@ -11,6 +11,7 @@ public record CreateTxnLogRequest(
         int txnCategoryId,
         Integer txnSubCategoryId,
         String txnFrequency,
+        int recurringId,
         String transferType,
         BigDecimal txnAmount
 ) {

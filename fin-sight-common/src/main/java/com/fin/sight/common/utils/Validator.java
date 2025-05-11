@@ -1,6 +1,7 @@
 package com.fin.sight.common.utils;
 
 import com.fin.sight.common.dto.CreateAccountRequest;
+import com.fin.sight.common.dto.CreateTxnLogRequest;
 import com.fin.sight.common.dto.CreateUserRequest;
 import com.fin.sight.common.dto.LoginUserRequest;
 import com.fin.sight.common.exceptions.InvalidRequestException;
@@ -54,6 +55,22 @@ public class Validator {
             throw new InvalidRequestException("Request body can't be empty");
         }
         if (Stream.of(request.accountName(), request.accountType()).anyMatch(Objects::isNull)) {
+            throw new InvalidRequestException("Mandatory fields can't be empty");
+        }
+    }
+
+    /**
+     * Method to validate the Tran Log create request.
+     *
+     * @param request: the request to be validated.
+     */
+    public static void validateTranLogRequest(final CreateTxnLogRequest request) {
+        if (Objects.isNull(request)) {
+            throw new InvalidRequestException("Request body can't be empty");
+        }
+        if (Stream.of(request.txnCategoryId(), request.txnSubCategoryId(), request.txnAmount(), request.transferType(),
+                        request.txnFrequency(), request.year(), request.month(), request.date(), request.accountId())
+                .anyMatch(Objects::isNull)) {
             throw new InvalidRequestException("Mandatory fields can't be empty");
         }
     }
