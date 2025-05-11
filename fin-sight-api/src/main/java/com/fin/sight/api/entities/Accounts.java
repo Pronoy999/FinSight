@@ -1,5 +1,6 @@
 package com.fin.sight.api.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
@@ -27,7 +28,8 @@ public class Accounts {
     private LocalDateTime created;
     @UpdateTimestamp
     private LocalDateTime updated;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_guid", referencedColumnName = "guid", insertable = false, updatable = false)
+    @JsonIgnore
     private User user;
 }
