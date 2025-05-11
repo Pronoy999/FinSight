@@ -8,7 +8,7 @@ on:
       branches:
         - main
 jobs:
-  build:
+  build-java:
     runs-on: ubuntu-latest
     steps:
       - name: checkout Code
@@ -23,7 +23,7 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
   deploy:
-    needs: build
+    needs: build-java
     runs-on: ubuntu-latest
 
     steps:
@@ -38,3 +38,25 @@ jobs:
         run: |
           docker build -t ${{secrets.DOCKER_USERNAME}}/fin-sight:latest .
           docker push ${{secrets.DOCKER_USERNAME}}/fin-sight:latest
+
+  build-angular:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Angular CLI globally
+        run: npm install -g @angular/cli
+
+      - name: Install dependencies
+        working-directory: ./fin-sight-ui
+        run: npm install
+
+      - name: Build Angular project
+        working-directory: ./fin-sight-ui
+        run: ng build
