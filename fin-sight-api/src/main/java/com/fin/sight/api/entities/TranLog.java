@@ -31,7 +31,7 @@ public class TranLog {
     private Integer date;
 
     @Column(name = "account_id", nullable = false)
-    private Integer accountId;
+    private Long accountId;
 
     @Column(name = "txn_frequency", nullable = false)
     private String txnFrequency;

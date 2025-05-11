@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/fin-sight-api/src/main/java/com/fin/sight/api/service/TransactionService.java" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/fin-sight-database/src/main/java/com/fin/sight/database/sql/tbl_accounts.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/fin-sight-database/src/main/java/com/fin/sight/database/sql/tbl_credentials.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/fin-sight-database/src/main/java/com/fin/sight/database/sql/tbl_recurring.sql" dialect="PostgreSQL" />
@@ -8,5 +9,6 @@
     <file url="file://$PROJECT_DIR$/fin-sight-database/src/main/java/com/fin/sight/database/sql/tbl_user.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/fin-sight-database/src/main/java/com/fin/sight/database/sql/txn_category.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/fin-sight-database/src/main/java/com/fin/sight/database/sql/txn_sub_category.sql" dialect="PostgreSQL" />
+    <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>

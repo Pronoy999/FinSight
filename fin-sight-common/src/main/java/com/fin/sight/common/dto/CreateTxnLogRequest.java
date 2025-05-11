@@ -7,11 +7,11 @@ public record CreateTxnLogRequest(
         int year,
         int month,
         int date,
-        int accountId,
+        long accountId,
         int txnCategoryId,
         Integer txnSubCategoryId,
         String txnFrequency,
-        int recurringId,
+        long recurringId,
         String transferType,
         BigDecimal txnAmount
 ) {
