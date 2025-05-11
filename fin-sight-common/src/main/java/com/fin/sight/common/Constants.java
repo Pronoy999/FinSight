@@ -1,5 +1,7 @@
 package com.fin.sight.common;
 
+import java.util.List;
+
 public class Constants {
     public static final String HEALTH_CHECK_API_PATH = "/ping";
     public static final String USER_PATH = "/user";
@@ -14,4 +16,6 @@ public class Constants {
     public static final String GENERIC_ERROR_MESSAGE = "Something went wrong";
     public static final String USER_TOKEN_HEADER = "user-token";
     public static final String USER_GUID_FIELD = "user_guid";
+
+    public static final List<String> TXN_FILTER_FIELDS = List.of("category_id", "year", "date", "month", "account_id", "txn_frequency", "recurring_id", "transfer_type", "txn_amount", "created");
 }

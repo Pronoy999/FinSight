@@ -55,6 +55,7 @@ public class TxnController {
                 throw new InvalidTokenException("User token is missing");
             }
             log.info("Searching transactions");
+            Validator.validateTxnSearchRequest(request);
             return transactionService.getTxnsByFilter(request, userToken);
         } catch (InvalidTokenException e) {
             log.error("Invalid token: {}", e.getMessage());

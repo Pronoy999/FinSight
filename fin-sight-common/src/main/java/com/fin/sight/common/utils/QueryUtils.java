@@ -1,5 +1,6 @@
 package com.fin.sight.common.utils;
 
+import com.fin.sight.common.Constants;
 import com.fin.sight.common.dto.Filters;
 import io.micrometer.common.util.StringUtils;
 import jakarta.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ public class QueryUtils {
      */
     public static String getTxnFilterQuery(@NotNull final List<Filters> filters, @NotNull final String userGuid) {
         StringBuilder filterQuery = new StringBuilder();
-        filterQuery.append("SELECT * FROM tbl_tran_log WHERE user_guid = '").append(userGuid).append("'");
+        filterQuery.append("SELECT * FROM tbl_tran_log WHERE " + Constants.USER_GUID_FIELD + " = '").append(userGuid).append("'");
         filters.forEach(filter -> {
             String fieldName = filter.fieldName();
             String value = filter.value();
