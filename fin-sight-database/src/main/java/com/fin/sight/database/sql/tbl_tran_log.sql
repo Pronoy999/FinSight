@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS tbl_tran_log
     txn_category_id     INTEGER        NOT NULL,
     txn_sub_category_id INTEGER,
     txn_frequency       VARCHAR(50)    NOT NULL,
+    recurring_id        INTEGER                 DEFAULT -1,
     transfer_type       VARCHAR(10)    NOT NULL,
     txn_amount          DECIMAL(10, 2) NOT NULL,
     created             TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -53,4 +54,10 @@ ALTER TABLE tbl_tran_log
     ADD CONSTRAINT fk_txn_sub_category
         FOREIGN KEY (txn_sub_category_id)
             REFERENCES txn_sub_category (id)
+            ON DELETE CASCADE;
+
+ALTER TABLE tbl_tran_log
+    ADD CONSTRAINT fk_recurring_id
+        FOREIGN KEY (recurring_id)
+            REFERENCES tbl_recurring (recurring_id)
             ON DELETE CASCADE;

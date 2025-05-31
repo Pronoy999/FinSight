@@ -3,16 +3,16 @@ drop table if exists tbl_recurring;
 
 create table tbl_recurring
 (
-    recurring_id     integer primary key not null,
-    account_id       integer             not null,
-    user_guid        varchar(1000)       not null,
+    recurring_id     serial primary key not null,
+    account_id       integer            not null,
+    user_guid        varchar(1000)      not null,
     nature           varchar(100),
     type             varchar(100),
-    frequency        varchar(10)         not null,
-    transfer_type    varchar(50)         not null,
-    estimated_amount decimal(10, 2)      not null default 0.0,
-    created_at       timestamp                    default current_timestamp,
-    updated_at       timestamp                    default current_timestamp
+    frequency        varchar(10)        not null,
+    transfer_type    varchar(50)        not null,
+    estimated_amount decimal(10, 2)     not null default 0.0,
+    created       timestamp                   default current_timestamp,
+    updated       timestamp                   default current_timestamp
 );
 
 ALTER TABLE tbl_recurring

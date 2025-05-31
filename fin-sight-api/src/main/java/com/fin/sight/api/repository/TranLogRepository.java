@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TranLogRepository extends JpaRepository<TranLog, Integer> {
+    TranLog findByIdAndUserGuid(Integer id, String userGuid);
 }
