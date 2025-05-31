@@ -10,3 +10,8 @@ create table if not exists fin_sight.tbl_user
     created      timestamp     not null default current_timestamp,
     updated      timestamp     not null default current_timestamp
 );
+
+ALTER TABLE tbl_user
+    ALTER COLUMN phone_number DROP NOT NULL;
+ALTER TABLE tbl_user
+    ALTER COLUMN age DROP NOT NULL;
