@@ -1,4 +1,91 @@
 /* You can add global styles to this file, and also import other style files */
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+// @use '@angular/material' as mat;
+// @use './theme-colors' as my-theme;
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/@angular/material/prebuilt-themes/indigo-pink.css';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+.full-width {
+  width: 100%;
+}
+
+.narrow-container {
+  max-width: 1000px;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  &.dark-mode {
+    color-scheme: dark;
+  }
+
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+}
+
+.mat-mdc-table {
+  // Basic striping
+  .mat-mdc-row:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.025);
+  }
+
+  .mat-mdc-row:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+    transition: background-color 0.2s ease;
+  }
+
+  .mat-mdc-cell,
+  .mat-mdc-header-cell {
+    padding: 8px !important;
+  }
+
+  // Header styling
+  .mat-mdc-header-row {
+    background-color: var(--mat-sys-surface-container-high);
+  }
+
+  // Optional: style for selected rows
+  .mat-mdc-row.selected {
+    background-color: rgba(0, 0, 0, 0.08);
+  }
+}
+
+// Optional: Scrollable table container
+.table-container {
+  max-height: 500px;
+  overflow: auto;
+
+  // Custom scrollbar styling
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+
+    &:hover {
+      background: #555;
+    }
+  }
+}
+
+// Optional: Responsive table container
+.responsive-table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+}

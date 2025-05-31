@@ -1,92 +1,120 @@
-<div id="storageCentralMainContainer">
-
-    <!--Design Option #1-->
-    <div class="formWrapperContainer" >
+<div id="finSightMainContainer">
+    <div class="formWrapperContainer">
         <div class="d-flex" style="align-items: center; justify-content: center; margin-bottom: 30px;">
-            <img src="./assets/images/server.png" class="logoImg mr-16" style="height: 80px;" />
             <h1>FinSight</h1>
         </div>
 
-        <form class="loginForm" [formGroup]="loginForm" class="input-min-spacing">
-            <mat-form-field class="mb-10">
+        <div id="google-signin-button"></div>
+        <form class="loginForm" [formGroup]="loginForm" class="input-min-spacing">           
+            <mat-form-field class="mb-10 w-100">
                 <mat-label>Email</mat-label>
                 <mat-icon matPrefix style="color: grey;">email</mat-icon>
                 <input matInput #loginUser name="emailId" id="emailId" formControlName="emailId" />
-                <mat-error *ngIf="loginForm.controls['emailId'].errors?.['required']">User Name field is Mandatory.</mat-error>
+                <mat-error *ngIf="loginForm.controls['emailId'].errors?.['required']">User Name field is Mandatory.
+                </mat-error>
             </mat-form-field>
 
-            <mat-form-field class="mb-10">
+            <mat-form-field class="mb-10 w-100">
                 <mat-label>Password</mat-label>
                 <mat-icon matPrefix style="color: grey;">vpn_key</mat-icon>
-                <input matInput name="password" [type]="hide ? 'password' : 'text'" formControlName="password" maxlength="30">
-                <mat-icon matSuffix (click)="hide = !hide" style="color: grey;">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                <mat-error *ngIf="loginForm.controls['password'].errors?.['required']">Password field is Mandatory.</mat-error>
-                <mat-error  *ngIf="loginForm.controls['password'].errors?.['minlength'] || loginForm.controls['password'].errors?.['maxlength']">
+                <input matInput name="password" [type]="hide ? 'password' : 'text'" formControlName="password"
+                    maxlength="30">
+                <mat-icon matSuffix (click)="hide = !hide" style="color: grey;">{{hide ? 'visibility_off' :
+                    'visibility'}}</mat-icon>
+                <mat-error *ngIf="loginForm.controls['password'].errors?.['required']">Password field is Mandatory.
+                </mat-error>
+                <mat-error
+                    *ngIf="loginForm.controls['password'].errors?.['minlength'] || loginForm.controls['password'].errors?.['maxlength']">
                     Invalid Password!Please enter a correct password.
                 </mat-error>
             </mat-form-field>
 
             <div class="remember-cover">
                 <div>
-                    <mat-checkbox type="checkbox" formControlName="rememberMe" name="rememberMe" class="w-90">Remember Me</mat-checkbox>
-                    <mat-icon class="pointer-highlight" matTooltip="Our application will store your data till you next log out. It will be applicable on all other devices.">info</mat-icon>
+                    <mat-checkbox type="checkbox" formControlName="rememberMe" name="rememberMe" class="w-90">Remember
+                        Me</mat-checkbox>
+                    <mat-icon class="pointer-highlight"
+                        matTooltip="Our application will store your data till you next log out. It will be applicable on all other devices.">
+                        info</mat-icon>
                 </div>
                 <span class="fs-12">Save my login details for next time.</span>
-                <!-- <a class="linkurl" (click)="registeredEmail.reset()">Forgot password ?</a> -->
             </div>
 
-            <button mat-raised-button color="primary" type="submit" id="loginBtn" (click)="signIn()" class="w-100 mt-24">Sign In</button>
+            <button mat-raised-button color="primary" type="submit" id="loginBtn" (click)="signIn()"
+                class="w-100 mt-24">Sign In</button>
+
             <p class="separator">OR</p>
+            <!-- <div id="google-signin-button"></div> -->
             <div style="text-align: center;">Dont have an account?
-                <a style="color: #0F62FE; font-weight: 500; cursor: pointer;text-shadow: 2px 2px 7px #0F62FE;" (click)="showSignIn = true; signup();">Sign up</a>
+                <a style="color: #0F62FE; font-weight: 500; cursor: pointer;text-shadow: 2px 2px 7px #0F62FE;"
+                    (click)="showSignIn = true; signup();">Sign up</a>
             </div>
         </form>
     </div>
 
-    <h1 class="mainHeader">"See Your Finances Clearly." <span>FinSight</span>
-        "Smarter Insights. Stronger Decisions. Welcome to FinSight."</h1>
+    <div class="mainHeader">
+        <h1>See Your Finances Clearly.</h1>
+        <span>"Smarter Insights. Stronger Decisions. Welcome to FinSight."</span>
+    </div>
 
     <mat-sidenav-container class="registerFormSlider">
-        <mat-sidenav #registerFormSideNav mode="side" position="start" class="registerFormSideNav">
+        <mat-sidenav #registerFormSideNav mode="side" position="end" class="registerFormSideNav">
 
-            <div *ngIf="designOption1" class="p-20">
-                <div class="d-flex" style="justify-content: space-between;">
-                    <h1>Signup</h1>
-                    <mat-icon (click)="goBackToLogin()" class="pointer-highlight">close</mat-icon>
+            <div class="p-20">
+                <div class="d-flex align-items-center px-4 py-2">
+                    <mat-icon class="me-2" (click)="goBackToLogin()">keyboard_backspace</mat-icon>
+                    <h1 class="m-0">Register</h1>
+                    <mat-icon (click)="goBackToLogin()" class="pointer-highlight ms-auto">close</mat-icon>
                 </div>
-
-                <form class="registerForm" [formGroup]="registerForm" class="input-min-spacing">
-                    <mat-form-field class="mb-10">
+            
+                <form class="registerForm" [formGroup]="registerForm" class="input-min-spacing w-100 p-4">
+                    <mat-form-field class="mb-10 w-100">
                         <mat-label>First Name</mat-label>
                         <input matInput name="firstName" id="firstName" formControlName="firstName" />
-                        <mat-error *ngIf="registerForm.controls['firstName'].errors?.['required']">First Name field is Mandatory.</mat-error>
+                        <mat-error *ngIf="registerForm.controls['firstName'].errors?.['required']">First Name field is
+                            Mandatory.</mat-error>
                     </mat-form-field>
-
-                    <mat-form-field class="mb-10">
+            
+                    <mat-form-field class="mb-10 w-100">
                         <mat-label>Last Name</mat-label>
                         <input matInput name="lastName" id="lastName" formControlName="lastName" />
-                        <mat-error *ngIf="registerForm.controls['lastName'].errors?.['required']">Last Name field is Mandatory.</mat-error>
+                        <mat-error *ngIf="registerForm.controls['lastName'].errors?.['required']">Last Name field is
+                            Mandatory.</mat-error>
                     </mat-form-field>
-
-                    <mat-form-field class="mb-10">
+            
+                    <mat-form-field class="mb-10 w-100">
                         <mat-label>Email</mat-label>
-                        <input matInput name="registerEmail" id="registerEmail" formControlName="registerEmail" />
-                        <mat-error *ngIf="registerForm.controls['registerEmail'].errors?.['required']">Email field is Mandatory.</mat-error>
+                        <input matInput formControlName="emailId" />
+                        <mat-error *ngIf="registerForm.controls['emailId'].errors?.['required']">Email field is
+                            Mandatory.</mat-error>
                     </mat-form-field>
-
-                    <mat-form-field class="mb-10">
+            
+                    <mat-form-field class="mb-10 w-100">
+                        <mat-label>Phone Number</mat-label>
+                        <input matInput name="phoneNumber" id="phoneNumber" formControlName="phoneNumber" />
+                        <mat-error *ngIf="registerForm.controls['phoneNumber'].errors?.['required']">Phone Number field
+                            is
+                            Mandatory.</mat-error>
+                    </mat-form-field>
+            
+                    <mat-form-field class="mb-10 w-100">
+                        <mat-label>Age</mat-label>
+                        <input matInput name="age" id="age" formControlName="age" type="number" />
+                        <mat-error *ngIf="registerForm.controls['age'].errors?.['required']">Age field is
+                            Mandatory.</mat-error>
+                    </mat-form-field>
+            
+                    <mat-form-field class="mb-10 w-100">
                         <mat-label>Password</mat-label>
-                        <input matInput name="password"  [type]="hide ? 'password' : 'text'" formControlName="registerPassword" maxlength="30">
+                        <input matInput name="password" [type]="hide ? 'password' : 'text'" formControlName="password"
+                            maxlength="30">
                         <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        <mat-error *ngIf="registerForm.controls['registerPassword'].errors?.['required']">Password field is Mandatory.</mat-error>
+                        <mat-error *ngIf="registerForm.controls['password'].errors?.['required']">Password field
+                            is Mandatory.</mat-error>
                     </mat-form-field>
-
-                    <button mat-raised-button color="primary" type="submit" id="registerBtn" class="w-100" (click)="register()">Register</button>
-
-                    <div class="goBackToLoginWrapper d-flex align-center pointer-highlight" (click)="goBackToLogin()" style="position: absolute; bottom: 20px; left: 20px;">
-                        <mat-icon class="mr-10">keyboard_backspace</mat-icon>
-                        <span>Go back to login</span>
-                    </div>
+            
+                    <button mat-raised-button color="primary" type="submit" id="registerBtn" class="w-100"
+                        (click)="register()">Register</button>
                 </form>
             </div>
 
