@@ -34,7 +34,7 @@ public class UserService {
      * Method to register a user.
      *
      * @param request: the API request.
-     * @return the create User response.
+     * @return the createUser response.
      */
     public CreateUserResponse registerUser(@NotNull final CreateUserRequest request) {
         if (Objects.nonNull(request.getGoogleOAuthToken())) {
