@@ -10,6 +10,7 @@ import com.fin.sight.common.exceptions.InvalidRequestException;
 import com.fin.sight.common.exceptions.InvalidTokenException;
 import com.fin.sight.common.utils.GuidUtils;
 import com.fin.sight.common.utils.JwtUtils;
+import io.micrometer.common.util.StringUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class UserService {
      * Method to register a user.
      *
      * @param request: the API request.
-     * @return the create User response.
+     * @return the createUser response.
      */
     public CreateUserResponse registerUser(@NotNull final CreateUserRequest request) {
         if (Objects.nonNull(request.getGoogleOAuthToken())) {
@@ -44,13 +45,20 @@ public class UserService {
             request.setLastName(tokenData.lastName());
         }
         if (doesUserExists(request.getEmailId())) {
-            throw new InvalidRequestException("Email id already registered.");
+            log.info("User already existing, login in instead.");
+            credentialsRepository.updateThirdPartyTokenByEmailId(request.getGoogleOAuthToken(), request.getEmailId());
+            Credentials credentials = getUserCredentials(request.getEmailId(), null);
+            if (Objects.isNull(credentials)) {
+                throw new InvalidCredentialsException("User already exists, but credentials not found.");
+            }
+            String jwt = jwtUtils.createJwt(credentials.getEmailId(), credentials.getUserGuid(), request.getGoogleOAuthToken());
+            return new CreateUserResponse(credentials.getUserGuid(), jwt);
         }
         String guid = GuidUtils.generateGuid();
         String jwt = jwtUtils.createJwt(request.getEmailId(), guid, request.getGoogleOAuthToken());
         User user = createUser(request, guid);
         userRepository.save(user);
-        Credentials credentials = createCredentials(request, guid);
+        Credentials credentials = createCredentials(request, guid, request.getGoogleOAuthToken());
         credentialsRepository.save(credentials);
         return new CreateUserResponse(guid, jwt);
     }
@@ -92,18 +100,20 @@ public class UserService {
     /**
      * Method to create the user's credentials.
      *
-     * @param request: the user create request.
-     * @param guid:    the generated Guid.
+     * @param request:         the user create request.
+     * @param guid:            the generated Guid.
+     * @param thirdPartyToken: the Google OAuth token, if any.
      * @return the credentials object of type {@link Credentials}
      */
-    private Credentials createCredentials(@NotNull final CreateUserRequest request, @NotNull final String guid) {
+    private Credentials createCredentials(@NotNull final CreateUserRequest request, @NotNull final String guid, final String thirdPartyToken) {
         Credentials credentials = new Credentials();
         credentials.setEmailId(request.getEmailId());
-        if (Objects.nonNull(request.getPassword())) {
+        if (StringUtils.isEmpty(request.getGoogleOAuthToken())) {
             credentials.setPassword(request.getPassword());
             credentials.setThirdPartySign(false);
         } else {
             credentials.setThirdPartySign(true);
+            credentials.setThirdPartyToken(thirdPartyToken);
         }
         credentials.setUserGuid(guid);
         credentials.setActive(true);
@@ -128,10 +138,17 @@ public class UserService {
      * @param password: the password for the user.
      * @return the matched credentials or the NULL, for in-correct user details.
      */
-    private Credentials getUserCredentials(@NotNull final String emailId, @NotNull final String password) {
-        Credentials credentials = credentialsRepository.findByEmailIdAndPasswordAndIsActive(emailId, password, true);
-        if (Objects.nonNull(credentials)) {
-            return credentials;
+    private Credentials getUserCredentials(@NotNull final String emailId, final String password) {
+        if (StringUtils.isNotEmpty(password)) {
+            Credentials credentials = credentialsRepository.findByEmailIdAndPasswordAndIsActive(emailId, password, true);
+            if (Objects.nonNull(credentials)) {
+                return credentials;
+            }
+        } else {
+            List<Credentials> credentialsList = credentialsRepository.findByEmailIdAndIsActive(emailId, true);
+            if (!credentialsList.isEmpty()) {
+                return credentialsList.get(0);
+            }
         }
         return null;
     }
