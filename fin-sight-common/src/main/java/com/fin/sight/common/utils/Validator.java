@@ -18,12 +18,9 @@ public class Validator {
         if (Objects.isNull(request)) {
             throw new InvalidRequestException("Request body can't be empty");
         }
-        if (Stream.of(request.firstName(), request.lastName(), request.emailId(), request.phoneNumber(), request.age(), request.password())
-                .anyMatch(Objects::isNull)) {
+        if (Stream.of(request.getFirstName(), request.getLastName(), request.getLastName())
+                .anyMatch(Objects::isNull) && Stream.of(request.getPassword(), request.getGoogleOAuthToken()).anyMatch(Objects::isNull)) {
             throw new InvalidRequestException("Mandatory fields can't be empty");
-        }
-        if (request.age() < 18 || request.age() > 100) {
-            throw new InvalidRequestException("Please enter a valid age");
         }
     }
 
@@ -36,7 +33,7 @@ public class Validator {
         if (Objects.isNull(request)) {
             throw new InvalidRequestException("Request body can't be empty");
         }
-        if (Stream.of(request.emailId(), request.password()).anyMatch(Objects::isNull)) {
+        if (Stream.of(request.emailId(), request.password()).anyMatch(Objects::isNull) && Stream.of(request.googleAuthToken()).anyMatch(Objects::isNull)) {
             throw new InvalidRequestException("Mandatory fields can't be empty");
         }
         if (request.emailId().length() < 5 || request.password().length() < 5) {

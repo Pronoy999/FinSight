@@ -8,6 +8,7 @@ import com.fin.sight.common.dto.LoginUserRequest;
 import com.fin.sight.common.dto.LoginUserResponse;
 import com.fin.sight.common.exceptions.InvalidCredentialsException;
 import com.fin.sight.common.exceptions.InvalidRequestException;
+import com.fin.sight.common.exceptions.InvalidTokenException;
 import com.fin.sight.common.utils.ResponseGenerator;
 import com.fin.sight.common.utils.Validator;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,9 @@ public class UserController {
         } catch (InvalidRequestException e) {
             log.error("Error while registering user: ", e);
             return ResponseGenerator.generateFailureResponse(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (InvalidTokenException e) {
+            log.error("Invalid Google Token", e);
+            return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Invalid Google OAuth token");
         } catch (Exception e) {
             return ResponseGenerator.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, Constants.GENERIC_ERROR_MESSAGE);
         }

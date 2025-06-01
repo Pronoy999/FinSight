@@ -4,20 +4,20 @@ import com.fin.sight.api.entities.Credentials;
 import com.fin.sight.api.entities.User;
 import com.fin.sight.api.repository.CredentialsRepository;
 import com.fin.sight.api.repository.UserRepository;
-import com.fin.sight.common.dto.CreateUserRequest;
-import com.fin.sight.common.dto.CreateUserResponse;
-import com.fin.sight.common.dto.LoginUserRequest;
-import com.fin.sight.common.dto.LoginUserResponse;
+import com.fin.sight.common.dto.*;
 import com.fin.sight.common.exceptions.InvalidCredentialsException;
 import com.fin.sight.common.exceptions.InvalidRequestException;
+import com.fin.sight.common.exceptions.InvalidTokenException;
 import com.fin.sight.common.utils.GuidUtils;
 import com.fin.sight.common.utils.JwtUtils;
 import jakarta.validation.constraints.NotNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -37,11 +37,17 @@ public class UserService {
      * @return the create User response.
      */
     public CreateUserResponse registerUser(@NotNull final CreateUserRequest request) {
-        if (doesUserExists(request.emailId())) {
+        if (Objects.nonNull(request.getGoogleOAuthToken())) {
+            TokenData tokenData = jwtUtils.verifyGoogleOAuthToken(request.getGoogleOAuthToken());
+            request.setEmailId(tokenData.emailId());
+            request.setFirstName(tokenData.firstName());
+            request.setLastName(tokenData.lastName());
+        }
+        if (doesUserExists(request.getEmailId())) {
             throw new InvalidRequestException("Email id already registered.");
         }
         String guid = GuidUtils.generateGuid();
-        String jwt = jwtUtils.createJwt(request.emailId(), guid);
+        String jwt = jwtUtils.createJwt(request.getEmailId(), guid, request.getGoogleOAuthToken());
         User user = createUser(request, guid);
         userRepository.save(user);
         Credentials credentials = createCredentials(request, guid);
@@ -61,7 +67,7 @@ public class UserService {
         if (Objects.isNull(credentials)) {
             throw new InvalidCredentialsException("Invalid User name or password.");
         }
-        String jwt = jwtUtils.createJwt(credentials.getEmailId(), credentials.getUserGuid());
+        String jwt = jwtUtils.createJwt(credentials.getEmailId(), credentials.getUserGuid(), credentials.getThirdPartyToken());
         return new LoginUserResponse(jwt, credentials.getUserGuid());
     }
 
@@ -75,11 +81,11 @@ public class UserService {
     private User createUser(@NotNull final CreateUserRequest request, @NotNull final String guid) {
         User user = new User();
         user.setGuid(guid);
-        user.setFirstName(request.firstName());
-        user.setLastName(request.lastName());
-        user.setEmailId(request.emailId());
-        user.setPhoneNumber(request.phoneNumber());
-        user.setAge(request.age());
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmailId(request.getEmailId());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setAge(request.getAge());
         return user;
     }
 
@@ -92,8 +98,13 @@ public class UserService {
      */
     private Credentials createCredentials(@NotNull final CreateUserRequest request, @NotNull final String guid) {
         Credentials credentials = new Credentials();
-        credentials.setEmailId(request.emailId());
-        credentials.setPassword(request.password());
+        credentials.setEmailId(request.getEmailId());
+        if (Objects.nonNull(request.getPassword())) {
+            credentials.setPassword(request.getPassword());
+            credentials.setThirdPartySign(false);
+        } else {
+            credentials.setThirdPartySign(true);
+        }
         credentials.setUserGuid(guid);
         credentials.setActive(true);
         return credentials;

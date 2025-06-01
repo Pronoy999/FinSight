@@ -1,8 +1,8 @@
 package com.fin.sight.api.configs;
 
-import com.fin.sight.api.service.UserService;
 import com.fin.sight.api.repository.CredentialsRepository;
 import com.fin.sight.api.repository.UserRepository;
+import com.fin.sight.api.service.UserService;
 import com.fin.sight.common.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

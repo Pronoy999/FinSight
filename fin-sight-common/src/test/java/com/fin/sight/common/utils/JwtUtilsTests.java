@@ -17,11 +17,12 @@ public class JwtUtilsTests {
 
     @Test
     public void testGenerateJwt() {
-        String token = jwtUtils.createJwt("dummyEmail", "dummyGuid");
+        String token = jwtUtils.createJwt("dummyEmail", "dummyGuid", "dummyToken");
         Assertions.assertNotNull(token);
         JwtData jwtData = jwtUtils.decodeJwt(token);
         Assertions.assertEquals("dummyEmail", jwtData.emailId());
         Assertions.assertEquals("dummyGuid", jwtData.guid());
+        Assertions.assertEquals("dummyToken", jwtData.thirdPartyToken());
     }
 
     @Test

@@ -19,8 +19,12 @@ public class Credentials {
     private String userGuid;
     @Column(name = "email_id", nullable = false)
     private String emailId;
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
+    @Column(name = "is_third_party_sign", nullable = false)
+    private boolean isThirdPartySign;
+    @Column(name = "third_party_token", unique = true)
+    private String thirdPartyToken;
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
     @CreationTimestamp

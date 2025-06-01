@@ -1,4 +1,4 @@
 package com.fin.sight.common.dto;
 
-public record JwtData(String guid, String emailId) {
+public record JwtData(String guid, String emailId,String thirdPartyToken) {
 }

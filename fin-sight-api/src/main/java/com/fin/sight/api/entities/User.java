@@ -23,9 +23,9 @@ public class User {
     private String lastName;
     @Column(name = "email_id", nullable = false, unique = true)
     private String emailId;
-    @Column(name = "phone_number", nullable = false, unique = true)
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
-    @Column(name = "age", nullable = false)
+    @Column(name = "age")
     private int age;
     @CreationTimestamp
     private LocalDateTime created;
