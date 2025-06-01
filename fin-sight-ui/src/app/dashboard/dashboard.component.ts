@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Dialog, DialogRef, DIALOG_DATA, DialogModule } from '@angular/cdk/dialog';
 import { MaterialModule } from '../shared/material.module';
+import { CreateNewAccountComponent } from './create-new-account/create-new-account.component';
 
 @Component({
     selector: 'app-dashboard',
@@ -23,17 +24,17 @@ export class DashboardComponent implements OnInit {
     }
 
 
-    // createNewAccount(): void {
-    //     const dialogRef = this.dialog.open<string>(CreateNewAccountComponent, {
-    //         width: '250px',
-    //         data: { accountName: '', accountType: '' },
-    //     });
+    createNewAccount(): void {
+        const dialogRef = this.dialog.open<string>(CreateNewAccountComponent, {
+            width: '250px',
+            data: { accountName: '', accountType: '' },
+        });
 
-    //     dialogRef.closed.subscribe(result => {
-    //         console.log('The dialog was closed', result);
-    //         localStorage.getItem("loggedInUserJWT")
-    //     });
-    // }
+        dialogRef.closed.subscribe(result => {
+            console.log('The dialog was closed', result);
+            localStorage.getItem("loggedInUserJWT")
+        });
+    }
 
 
 }

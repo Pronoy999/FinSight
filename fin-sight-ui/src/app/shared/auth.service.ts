@@ -16,7 +16,7 @@ declare global {
 export class FinSightAuthService {
 
     private googleAuthInitialized = false;
-    apiUrl = 'http://localhost:8080/';
+    apiUrl = 'http://192.168.1.8:8080/';
 
     constructor(private router: Router, private http: HttpClient) { }
 
@@ -58,9 +58,31 @@ export class FinSightAuthService {
     }
 
     handleCredentialResponse(response: any): void {
+        const registerUserData = {
+            "firstName": null,
+            "lastName": null,
+            "emailId": null,
+            "phoneNumber": null,
+            "age": null,
+            "password": null,
+            "googleOAuthToken": response.credential
+        }
         console.log('Google Credential:', response.credential);
         alert('Google Sign-in Successful');
-        this.router.navigate(['/dashboard']);
+
+        console.log(response);
+
+        this.http.post<any>(this.apiUrl + "user", registerUserData).subscribe({
+            next: (res) => {
+                console.log('User registered successfully:', res);
+                localStorage.setItem("loggedInUserJWT", res.jwtToken);
+                //this.router.navigate(['/dashboard']);
+            }
+            , error: (err) => {
+                console.error('Error registering user:', err);
+                alert('Error during registration. Please try again.');
+            }
+        });
     }
 
     isLoginSuccess(loginData: any): Observable<HttpResponse<any>> {

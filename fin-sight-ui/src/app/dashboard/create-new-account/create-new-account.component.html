@@ -1,0 +1,22 @@
+<div style="background-color: white;">
+    <h4>Hi user</h4>
+    <div>
+        <mat-form-field>
+            <mat-label>Enter account name</mat-label>
+            <input matInput [(ngModel)]="data.accountName">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Account Type</mat-label>
+            <mat-select [(ngModel)]="data.accountType">
+                <mat-option value="Credit Card">Credit Card</mat-option>
+                <mat-option value="Debit Card">Debit Card</mat-option>
+                <mat-option value="Bank Account">Bank Account</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <div>
+        <button mat-raised-button color="primary" (click)="dialogRef.close(data)">Submit</button>
+        <button mat-button color="primary" (click)="dialogRef.close()">Cancel</button>
+    </div>
+</div>

@@ -1,10 +1,9 @@
 <div id="finSightMainContainer">
     <div class="formWrapperContainer">
-        <div class="d-flex" style="align-items: center; justify-content: center; margin-bottom: 30px;">
+        <!-- <div class="d-flex" style="align-items: center; justify-content: center; margin-bottom: 30px;"> -->
             <h1>FinSight</h1>
-        </div>
-
-        <div id="google-signin-button"></div>
+        <!-- </div> -->
+        
         <form class="loginForm" [formGroup]="loginForm" class="input-min-spacing">           
             <mat-form-field class="mb-10 w-100">
                 <mat-label>Email</mat-label>
@@ -30,31 +29,29 @@
             </mat-form-field>
 
             <div class="remember-cover">
-                <div>
+                <div style="display: flex; align-items: center;">
                     <mat-checkbox type="checkbox" formControlName="rememberMe" name="rememberMe" class="w-90">Remember
                         Me</mat-checkbox>
-                    <mat-icon class="pointer-highlight"
+                    <mat-icon class="pointer-highlight" style="margin-left: 5px;"
                         matTooltip="Our application will store your data till you next log out. It will be applicable on all other devices.">
                         info</mat-icon>
                 </div>
                 <span class="fs-12">Save my login details for next time.</span>
             </div>
 
-            <button mat-raised-button color="primary" type="submit" id="loginBtn" (click)="signIn()"
-                class="w-100 mt-24">Sign In</button>
+            <button mat-raised-button color="primary" type="submit" id="loginBtn" (click)="signIn()" class="w-100 mt-24">Sign In</button>
 
             <p class="separator">OR</p>
-            <!-- <div id="google-signin-button"></div> -->
-            <div style="text-align: center;">Dont have an account?
-                <a style="color: #0F62FE; font-weight: 500; cursor: pointer;text-shadow: 2px 2px 7px #0F62FE;"
-                    (click)="showSignIn = true; signup();">Sign up</a>
+            <div id="google-signin-button"></div>
+            <div style="text-align: center; margin-top: 10px;">Dont have an account?
+                <a style="color: #0F62FE; font-weight: 500; cursor: pointer;" (click)="showSignIn = true; signup();">Sign up</a>
             </div>
         </form>
     </div>
 
     <div class="mainHeader">
         <h1>See Your Finances Clearly.</h1>
-        <span>"Smarter Insights. Stronger Decisions. Welcome to FinSight."</span>
+        <span>Smarter Insights. Stronger Decisions. Welcome to FinSight.</span>
     </div>
 
     <mat-sidenav-container class="registerFormSlider">

@@ -1,7 +1,7 @@
 #finSightMainContainer {
     display: flex;
     //background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.3)),url(../../assets/images/banner.jpg);
-    background-image: url(../assets/images/finSightBgImg.jpg);
+    background-image: url(../assets/images/finSightBgImg1.jpg);
     width: 100%;
     height: 100vh;
     background-position: center;
@@ -43,7 +43,7 @@
     height: 50px;
     line-height: 50px;
     text-align: center;
-    margin: 12px 0;
+    margin: 0;
 }
 
 .separator::before,
