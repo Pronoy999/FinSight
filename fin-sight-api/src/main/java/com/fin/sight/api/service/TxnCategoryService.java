@@ -1,19 +1,21 @@
 package com.fin.sight.api.service;
 
 import com.fin.sight.api.entities.TxnCategory;
-import com.fin.sight.api.entities.TxnSubCategory;
 import com.fin.sight.api.repository.TxnCategoryRepository;
-import com.fin.sight.api.repository.TxnSubCategoryRepository;
+import com.fin.sight.common.dto.CreateCategoryRequest;
+import com.fin.sight.common.exceptions.InvalidTokenException;
+import com.fin.sight.common.utils.JwtUtils;
+import com.fin.sight.common.utils.ResponseGenerator;
 import jakarta.annotation.PostConstruct;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @Slf4j
@@ -21,25 +23,16 @@ import java.util.Map;
 @Getter
 public class TxnCategoryService {
     private final TxnCategoryRepository txnCategoryRepository;
-    private final TxnSubCategoryRepository txnSubCategoryRepository;
     private List<TxnCategory> txnCategories;
-    private Map<Long, List<TxnSubCategory>> txnSubCategoryMap;
+    private final JwtUtils jwtUtils;
 
     @PostConstruct
     private void loadCategories() {
         log.info("Loading transaction categories from the database");
         txnCategories = txnCategoryRepository.findAll();
         log.info("Loaded {} transaction categories", txnCategories.size());
-        txnSubCategoryMap = new HashMap<>();
-        txnCategories.forEach(category -> {
-            List<TxnSubCategory> subCategories = txnSubCategoryRepository.findByCategoryId(category.getId());
-            txnSubCategoryMap.put(category.getId(), subCategories);
-        });
     }
 
-    public List<TxnSubCategory> getSubCategories(long categoryId) {
-        return txnSubCategoryMap.get(categoryId);
-    }
 
     /**
      * Get the Txn Category by ID
@@ -55,16 +48,25 @@ public class TxnCategoryService {
     }
 
     /**
-     * Get the Txn Sub Category by ID
+     * Method to get all transaction categories.
      *
-     * @param subCategoryId: the ID of the sub-category
-     * @return TxnSubCategory: the sub-category object
+     * @param request: the request object containing the category details
+     * @return the list of transaction categories
      */
-    public TxnSubCategory getTxnSubCategoryById(@NotNull final long subCategoryId) {
-        return txnSubCategoryMap.values().stream()
-                .flatMap(List::stream)
-                .filter(subCategory -> subCategory.getId() == subCategoryId)
-                .findFirst()
-                .orElse(null);
+    public ResponseEntity<?> createCategory(@NotNull final CreateCategoryRequest request, final String apiToken) {
+        try {
+            jwtUtils.verifyApiToken(apiToken);
+            TxnCategory category = new TxnCategory();
+            category.setName(request.name());
+            category.setNature(request.nature());
+            txnCategoryRepository.save(category);
+            loadCategories(); //Reload categories to update the cached list
+            return ResponseGenerator.generateSuccessResponse(txnCategories, HttpStatus.CREATED);
+        } catch (InvalidTokenException e) {
+            return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Invalid X-API-KEY");
+        } catch (Exception e) {
+            log.error("Error occurred while creating category: {}", e.getMessage());
+            return ResponseGenerator.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");
+        }
     }
 }
