@@ -59,6 +59,19 @@ https://documenter.getpostman.com/view/5329722/2sB2j98pGV
 3. View Insights: Explore charts and summaries to analyze your financial habits.
 4. Stay on Budget: Use budgeting tools to manage spending.
 
+## Docker Command:
+```
+   docker run -d \
+   --name fin_sight_api \
+   -p 8080:8080 \
+   -e SPRING_DATASOURCE_URL=jdbc:postgresql://172.17.0.1:5432/fin_sight \
+   -e SPRING_DATASOURCE_USERNAME=postgres \
+   -e SPRING_DATASOURCE_PASSWORD=admin \
+   -e SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect \
+   pronoytw/fin-sight:latest
+```
+Update your port and database credentials as needed.
+
 ## Contact
 For questions or feedback, feel free to reach out:
 
