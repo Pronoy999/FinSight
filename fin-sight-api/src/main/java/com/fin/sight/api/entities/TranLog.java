@@ -7,6 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.sql.Time;
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,10 +31,16 @@ public class TranLog {
     @Column(nullable = false)
     private Integer date;
 
+    @Column(name = "txn_time", nullable = false)
+    private Time txnTime;
+
     @Column(name = "account_id", nullable = false)
     private Long accountId;
 
-    @Column(name = "txn_frequency", nullable = false)
+    @Column(name = "is_shared_expense", nullable = false)
+    private Boolean isSharedExpense;
+
+    @Column(name = "txn_frequency")
     private String txnFrequency;
 
     @Column(name = "recurring_id")
@@ -42,8 +49,11 @@ public class TranLog {
     @Column(name = "transfer_type", nullable = false)
     private String transferType;
 
-    @Column(name = "txn_amount", nullable = false, precision = 10, scale = 2)
+    @Column(name = "txn_amount", nullable = false, precision = 20, scale = 4)
     private BigDecimal txnAmount;
+
+    @Column(name = "user_share", nullable = false, precision = 20, scale = 4)
+    private BigDecimal userShare;
 
     @CreationTimestamp
     private LocalDateTime created;
@@ -65,10 +75,6 @@ public class TranLog {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "txn_category_id", referencedColumnName = "id", nullable = false)
     private TxnCategory txnCategory;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "txn_sub_category_id", referencedColumnName = "id")
-    private TxnSubCategory txnSubCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recurring_id", referencedColumnName = "recurring_id", insertable = false, updatable = false)

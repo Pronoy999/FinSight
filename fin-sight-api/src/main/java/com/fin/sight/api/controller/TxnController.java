@@ -28,13 +28,13 @@ public class TxnController {
     @PostMapping
     public ResponseEntity<?> createTxnLog(@RequestBody CreateTxnLogRequest request, @RequestHeader Map<String, String> httpHeaders) {
         try {
-            String userToken = httpHeaders.get(Constants.USER_TOKEN_HEADER);
+            String apiToken = httpHeaders.get(Constants.X_API_KEY);
             Validator.validateTranLogRequest(request);
-            if (StringUtil.isNullOrEmpty(userToken)) {
-                throw new InvalidTokenException("User token is missing");
+            if (StringUtil.isNullOrEmpty(apiToken)) {
+                throw new InvalidTokenException("X-API-Key is missing");
             }
             log.info("Creating transaction log.");
-            return transactionService.createTransLog(request, userToken);
+            return transactionService.createTransLog(request, apiToken);
         } catch (InvalidTokenException e) {
             log.error("Invalid token: {}", e.getMessage());
             return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Invalid token");

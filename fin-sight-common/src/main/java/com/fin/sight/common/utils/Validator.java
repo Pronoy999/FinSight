@@ -18,7 +18,7 @@ public class Validator {
         if (Objects.isNull(request)) {
             throw new InvalidRequestException("Request body can't be empty");
         }
-        if (Stream.of(request.getFirstName(), request.getLastName(), request.getLastName(),request.getPassword())
+        if (Stream.of(request.getFirstName(), request.getLastName(), request.getLastName(), request.getPassword())
                 .anyMatch(Objects::isNull) && Stream.of(request.getGoogleOAuthToken()).anyMatch(Objects::isNull)) {
             throw new InvalidRequestException("Mandatory fields can't be empty");
         }
@@ -50,7 +50,7 @@ public class Validator {
         if (Objects.isNull(request)) {
             throw new InvalidRequestException("Request body can't be empty");
         }
-        if (Stream.of(request.accountName(), request.accountType()).anyMatch(Objects::isNull)) {
+        if (Stream.of(request.accountName(), request.accountType(),request.userGuid()).anyMatch(Objects::isNull)) {
             throw new InvalidRequestException("Mandatory fields can't be empty");
         }
     }
@@ -64,8 +64,8 @@ public class Validator {
         if (Objects.isNull(request)) {
             throw new InvalidRequestException("Request body can't be empty");
         }
-        if (Stream.of(request.txnCategoryId(), request.txnSubCategoryId(), request.txnAmount(), request.transferType(),
-                        request.txnFrequency(), request.year(), request.month(), request.date(), request.accountId())
+        if (Stream.of(request.txnCategoryId(), request.txnTime(), request.txnAmount(), request.userShare(), request.userGuid(),
+                        request.date(), request.accountId())
                 .anyMatch(Objects::isNull)) {
             throw new InvalidRequestException("Mandatory fields can't be empty");
         }

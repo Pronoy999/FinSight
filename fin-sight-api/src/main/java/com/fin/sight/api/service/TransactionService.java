@@ -7,6 +7,7 @@ import com.fin.sight.common.dto.CreateTxnLogResponse;
 import com.fin.sight.common.dto.GetTxnRequest;
 import com.fin.sight.common.dto.JwtData;
 import com.fin.sight.common.exceptions.InvalidTokenException;
+import com.fin.sight.common.utils.DateTimeUtils;
 import com.fin.sight.common.utils.JwtUtils;
 import com.fin.sight.common.utils.QueryUtils;
 import com.fin.sight.common.utils.ResponseGenerator;
@@ -20,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.List;
 import java.util.Objects;
 
@@ -37,26 +39,24 @@ public class TransactionService {
     /**
      * Create a transaction log
      *
-     * @param request:   the request object containing the transaction details
-     * @param userToken: the JWT token of the user
+     * @param request:  the request object containing the transaction details
+     * @param apiToken: the X-API-KEY for authentication
      * @return ResponseEntity: the response entity containing the status and message
      */
-    public ResponseEntity<?> createTransLog(@NotNull final CreateTxnLogRequest request, @NotNull final String userToken) {
+    public ResponseEntity<?> createTransLog(@NotNull final CreateTxnLogRequest request, @NotNull final String apiToken) {
         try {
-            JwtData userData = jwtUtils.decodeJwt(userToken);
-            if (userData == null) {
-                log.error("Invalid token: {}", userToken);
-                return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Invalid token");
-            }
+            jwtUtils.verifyApiToken(apiToken);
             TranLog tranLog = new TranLog();
-
-            tranLog.setYear(request.year());
-            tranLog.setMonth(request.month());
-            tranLog.setDate(request.date());
-            tranLog.setUserGuid(userData.guid());
+            int[] dateParts = DateTimeUtils.parseDate(request.date());
+            tranLog.setYear(dateParts[0]);
+            tranLog.setMonth(dateParts[1]);
+            tranLog.setDate(dateParts[2]);
+            tranLog.setTxnTime(Time.valueOf(request.txnTime()));
+            tranLog.setUserGuid(request.userGuid());
             tranLog.setTxnCategory(txnCategoryService.getTxnCategoryById(request.txnCategoryId()));
-            tranLog.setTxnSubCategory(txnCategoryService.getTxnSubCategoryById(request.txnSubCategoryId()));
             tranLog.setTxnAmount(request.txnAmount());
+            tranLog.setIsSharedExpense(request.isSharedExpense());
+            tranLog.setUserShare(request.userShare());
             if (request.recurringId() > 0) {
                 tranLog.setRecurringId(request.recurringId());
             }
@@ -69,7 +69,7 @@ public class TransactionService {
             CreateTxnLogResponse response = new CreateTxnLogResponse(tranLog.getId());
             return ResponseGenerator.generateSuccessResponse(response, HttpStatus.CREATED);
         } catch (InvalidTokenException e) {
-            log.error("Invalid token: {}", userToken);
+            log.error("Invalid token: {}", apiToken);
             return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Invalid token");
         } catch (Exception e) {
             log.error("Error creating transaction log: {}", e.getMessage());

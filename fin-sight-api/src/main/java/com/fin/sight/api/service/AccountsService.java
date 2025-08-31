@@ -27,26 +27,23 @@ public class AccountsService {
     /**
      * Method to create an account.
      *
-     * @param request:   the create account request.
-     * @param userToken: the user token for which the Account is to be created.
+     * @param request:  the create account request.
+     * @param apiToken: Service API Token for authentication.
      * @return the {@link ResponseEntity} containing the account creation response.
      */
-    public ResponseEntity<?> createAccount(@NotNull final CreateAccountRequest request, @NotNull final String userToken) {
+    public ResponseEntity<?> createAccount(@NotNull final CreateAccountRequest request, @NotNull final String apiToken) {
         try {
-            JwtData userData = jwtUtils.decodeJwt(userToken);
-            if (userData == null) {
-                return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Invalid User token");
-            }
+            jwtUtils.verifyApiToken(apiToken);
             Accounts accounts = new Accounts();
             accounts.setAccountName(request.accountName());
             accounts.setAccountType(request.accountType());
-            accounts.setUserGuid(userData.guid());
+            accounts.setUserGuid(request.userGuid());
             accounts = accountsRepository.save(accounts);
             return ResponseGenerator.generateSuccessResponse(
                     new CreateAccountResponse(accounts.getAccountId(), accounts.getAccountName()),
                     HttpStatus.CREATED);
         } catch (InvalidTokenException e) {
-            return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Invalid User token");
+            return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Invalid X-API-KEY");
         } catch (Exception e) {
             log.error("Error occurred while creating account: {}", e.getMessage());
             return ResponseGenerator.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error");

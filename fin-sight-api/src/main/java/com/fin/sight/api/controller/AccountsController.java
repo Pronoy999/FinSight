@@ -22,12 +22,12 @@ public class AccountsController {
     @PostMapping
     public ResponseEntity<?> createAccount(@RequestBody CreateAccountRequest request, @RequestHeader Map<String, String> requestHeaders) {
         if (requestHeaders.isEmpty()) {
-            return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Missing User token");
+            return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Missing X-API-KEY");
         }
         try {
             Validator.validateAccountRequest(request);
-            String userToken = requestHeaders.get(Constants.USER_TOKEN_HEADER);
-            return accountsService.createAccount(request, userToken);
+            String apiToken = requestHeaders.get(Constants.X_API_KEY);
+            return accountsService.createAccount(request,apiToken);
         } catch (InvalidRequestException e) {
             return ResponseGenerator.generateFailureResponse(HttpStatus.BAD_REQUEST, e.getMessage());
         }

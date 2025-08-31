@@ -4,15 +4,15 @@ import java.math.BigDecimal;
 
 public record CreateTxnLogRequest(
         String userGuid,
-        int year,
-        int month,
-        int date,
+        String date,
+        String txnTime,
         long accountId,
         int txnCategoryId,
-        Integer txnSubCategoryId,
         String txnFrequency,
         long recurringId,
         String transferType,
-        BigDecimal txnAmount
+        BigDecimal txnAmount,
+        BigDecimal userShare,
+        boolean isSharedExpense
 ) {
 }

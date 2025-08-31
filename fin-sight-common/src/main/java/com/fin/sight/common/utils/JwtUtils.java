@@ -13,6 +13,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.ObjectUtils;
 
 import java.util.Collections;
 import java.util.Objects;
@@ -22,6 +23,8 @@ public class JwtUtils {
 
     @Value("${google.client.id}")
     private String googleClientId;
+    @Value("${x-api-key}")
+    private String apiKey;
 
     public JwtUtils(String key) {
         this.key = key;
@@ -87,5 +90,15 @@ public class JwtUtils {
         }
     }
 
+    /**
+     * Method to verify the API token.
+     *
+     * @param token: the API token to be verified.
+     */
+    public void verifyApiToken(@NotNull final String token) {
+        if (ObjectUtils.isEmpty(token) || !apiKey.equals(token)) {
+            throw new InvalidTokenException("Invalid API Token");
+        }
+    }
 }
 

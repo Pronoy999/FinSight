@@ -1,3 +1,4 @@
+
 -- Ensure you’re using the correct schema
 ALTER DATABASE fin_sight SET search_path TO fin_sight;
 
@@ -15,13 +16,15 @@ CREATE TABLE IF NOT EXISTS tbl_tran_log
     year                INTEGER        NOT NULL,
     month               INTEGER        NOT NULL,
     date                INTEGER        NOT NULL,
+    txn_time            TIME           NOT NULL,
     account_id          INTEGER        NOT NULL,
     txn_category_id     INTEGER        NOT NULL,
-    txn_sub_category_id INTEGER,
-    txn_frequency       VARCHAR(50)    NOT NULL,
+    is_shared_expense   BOOLEAN        NOT NULL DEFAULT FALSE,
+    txn_frequency       VARCHAR(50),
     recurring_id        INTEGER                 DEFAULT -1,
-    transfer_type       VARCHAR(10)    NOT NULL,
-    txn_amount          DECIMAL(10, 2) NOT NULL,
+    transfer_type       VARCHAR(10),
+    txn_amount          DECIMAL(20, 4) NOT NULL,
+    user_share          DECIMAL(20, 4) NOT NULL,
     created             TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated             TIMESTAMP      NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -49,12 +52,6 @@ ALTER TABLE tbl_tran_log
             REFERENCES txn_category (id)
             ON DELETE CASCADE;
 
--- Txn Subcategory
-ALTER TABLE tbl_tran_log
-    ADD CONSTRAINT fk_txn_sub_category
-        FOREIGN KEY (txn_sub_category_id)
-            REFERENCES txn_sub_category (id)
-            ON DELETE CASCADE;
 
 ALTER TABLE tbl_tran_log
     ADD CONSTRAINT fk_recurring_id
