@@ -27,18 +27,18 @@ public class AccountsController {
         try {
             Validator.validateAccountRequest(request);
             String apiToken = requestHeaders.get(Constants.X_API_KEY);
-            return accountsService.createAccount(request,apiToken);
+            return accountsService.createAccount(request, apiToken);
         } catch (InvalidRequestException e) {
             return ResponseGenerator.generateFailureResponse(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
-    @GetMapping
-    public ResponseEntity<?> getAccountDetails(@RequestHeader Map<String, String> requestHeaders) {
+    @GetMapping(path = "/{userGuid}")
+    public ResponseEntity<?> getAccountDetails(@RequestHeader Map<String, String> requestHeaders,  @PathVariable("userGuid") String userGuid) {
         if (requestHeaders.isEmpty()) {
             return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Missing User token");
         }
-        String userToken = requestHeaders.get(Constants.USER_TOKEN_HEADER);
-        return accountsService.getAccountDetails(userToken);
+        String apiToken = requestHeaders.get(Constants.X_API_KEY);
+        return accountsService.getAccountDetails(apiToken,userGuid);
     }
 }

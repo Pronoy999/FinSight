@@ -38,10 +38,9 @@ public class AccountsService {
             accounts.setAccountName(request.accountName());
             accounts.setAccountType(request.accountType());
             accounts.setUserGuid(request.userGuid());
-            accounts = accountsRepository.save(accounts);
-            return ResponseGenerator.generateSuccessResponse(
-                    new CreateAccountResponse(accounts.getAccountId(), accounts.getAccountName()),
-                    HttpStatus.CREATED);
+            accountsRepository.save(accounts);
+            List<Accounts> accountsList = accountsRepository.findAccountsByUserGuid(request.userGuid());
+            return ResponseGenerator.generateSuccessResponse(accountsList, HttpStatus.CREATED);
         } catch (InvalidTokenException e) {
             return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Invalid X-API-KEY");
         } catch (Exception e) {
@@ -53,16 +52,14 @@ public class AccountsService {
     /**
      * Method to get account details.
      *
-     * @param userToken: the user token for which the Account is to be fetched.
+     * @param apiToken: the X-API-KEY for authentication.
+     * @param userGuid: the user guid for which the Account is to be fetched.
      * @return the {@link ResponseEntity} containing the account details.
      */
-    public ResponseEntity<?> getAccountDetails(@NotNull final String userToken) {
+    public ResponseEntity<?> getAccountDetails(@NotNull final String apiToken, String userGuid) {
         try {
-            JwtData userData = jwtUtils.decodeJwt(userToken);
-            if (userData == null) {
-                return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Invalid User token");
-            }
-            List<Accounts> accounts = accountsRepository.findAccountsByUserGuid(userData.guid());
+            jwtUtils.verifyApiToken(apiToken);
+            List<Accounts> accounts = accountsRepository.findAccountsByUserGuid(userGuid);
             if (accounts == null) {
                 return ResponseGenerator.generateFailureResponse(HttpStatus.NOT_FOUND, "Account not found");
             }
