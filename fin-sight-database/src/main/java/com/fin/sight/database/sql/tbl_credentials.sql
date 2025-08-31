@@ -8,7 +8,7 @@ create table tbl_credentials
     email_id            varchar(1000)       not null,
     password            varchar(1000)       not null,
     user_guid           varchar(1000)       not null,
-    is_third_party_sign boolean             not null default false,
+    third_party_user_id varchar(1000)                default null,
     third_party_token   varchar(4000)                default null,
     is_active           boolean                      default true not null,
     created             timestamp                    default current_timestamp,

@@ -10,10 +10,16 @@ import com.fin.sight.common.exceptions.InvalidRequestException;
 import com.fin.sight.common.exceptions.InvalidTokenException;
 import com.fin.sight.common.utils.GuidUtils;
 import com.fin.sight.common.utils.JwtUtils;
+import com.fin.sight.common.utils.ResponseGenerator;
 import io.micrometer.common.util.StringUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.protocol.HTTP;
+import org.checkerframework.checker.units.qual.C;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 import java.util.Objects;
@@ -34,33 +40,37 @@ public class UserService {
     /**
      * Method to register a user.
      *
-     * @param request: the API request.
+     * @param request:  the API request.
+     * @param apiToken: the API token.
      * @return the createUser response.
      */
-    public CreateUserResponse registerUser(@NotNull final CreateUserRequest request) {
-        if (Objects.nonNull(request.getGoogleOAuthToken())) {
-            TokenData tokenData = jwtUtils.verifyGoogleOAuthToken(request.getGoogleOAuthToken());
-            request.setEmailId(tokenData.emailId());
-            request.setFirstName(tokenData.firstName());
-            request.setLastName(tokenData.lastName());
-        }
+    public ResponseEntity<?> registerUser(@NotNull final CreateUserRequest request, final String apiToken) {
+        jwtUtils.verifyApiToken(apiToken);
         if (doesUserExists(request.getEmailId())) {
-            log.info("User already existing, login in instead.");
-            credentialsRepository.updateThirdPartyTokenByEmailId(request.getGoogleOAuthToken(), request.getEmailId());
-            Credentials credentials = getUserCredentials(request.getEmailId(), null);
-            if (Objects.isNull(credentials)) {
-                throw new InvalidCredentialsException("User already exists, but credentials not found.");
-            }
-            String jwt = jwtUtils.createJwt(credentials.getEmailId(), credentials.getUserGuid(), request.getGoogleOAuthToken());
-            return new CreateUserResponse(credentials.getUserGuid(), jwt);
+            return ResponseGenerator.generateFailureResponse(HttpStatus.CONFLICT, "User already exists with the given email id.");
         }
-        String guid = GuidUtils.generateGuid();
-        String jwt = jwtUtils.createJwt(request.getEmailId(), guid, request.getGoogleOAuthToken());
-        User user = createUser(request, guid);
-        userRepository.save(user);
-        Credentials credentials = createCredentials(request, guid, request.getGoogleOAuthToken());
-        credentialsRepository.save(credentials);
-        return new CreateUserResponse(guid, jwt);
+        String guid = request.getUserGuid();
+        User user = new User();
+        if (ObjectUtils.isEmpty(guid)) {
+            guid = GuidUtils.generateGuid();
+        }
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setGuid(guid);
+        user.setEmailId(request.getEmailId());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user = userRepository.save(user);
+
+        Credentials credentials = new Credentials();
+        credentials.setUser(user);
+        credentials.setUserGuid(guid);
+        credentials.setEmailId(request.getEmailId());
+        credentials.setThirdPartyToken(request.getGoogleOAuthToken());
+        credentials.setThirdPartyUserId(request.getThirdPartyUserId());
+        credentials.setActive(true);
+        credentials = credentialsRepository.save(credentials);
+
+        return ResponseGenerator.generateSuccessResponse(new CreateUserResponse(user.getGuid(), null), HttpStatus.CREATED);
     }
 
     /**
@@ -95,29 +105,6 @@ public class UserService {
         user.setPhoneNumber(request.getPhoneNumber());
         user.setAge(request.getAge());
         return user;
-    }
-
-    /**
-     * Method to create the user's credentials.
-     *
-     * @param request:         the user create request.
-     * @param guid:            the generated Guid.
-     * @param thirdPartyToken: the Google OAuth token, if any.
-     * @return the credentials object of type {@link Credentials}
-     */
-    private Credentials createCredentials(@NotNull final CreateUserRequest request, @NotNull final String guid, final String thirdPartyToken) {
-        Credentials credentials = new Credentials();
-        credentials.setEmailId(request.getEmailId());
-        if (StringUtils.isEmpty(request.getGoogleOAuthToken())) {
-            credentials.setPassword(request.getPassword());
-            credentials.setThirdPartySign(false);
-        } else {
-            credentials.setThirdPartySign(true);
-            credentials.setThirdPartyToken(thirdPartyToken);
-        }
-        credentials.setUserGuid(guid);
-        credentials.setActive(true);
-        return credentials;
     }
 
     /**

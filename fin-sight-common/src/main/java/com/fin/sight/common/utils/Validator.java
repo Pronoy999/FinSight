@@ -18,8 +18,11 @@ public class Validator {
         if (Objects.isNull(request)) {
             throw new InvalidRequestException("Request body can't be empty");
         }
-        if (Stream.of(request.getFirstName(), request.getLastName(), request.getLastName(), request.getPassword())
-                .anyMatch(Objects::isNull) && Stream.of(request.getGoogleOAuthToken()).anyMatch(Objects::isNull)) {
+        if (Stream.of(request.getFirstName(),
+                        request.getLastName(),
+                        request.getGoogleOAuthToken(),
+                        request.getEmailId())
+                .anyMatch(Objects::isNull)) {
             throw new InvalidRequestException("Mandatory fields can't be empty");
         }
     }
@@ -50,7 +53,7 @@ public class Validator {
         if (Objects.isNull(request)) {
             throw new InvalidRequestException("Request body can't be empty");
         }
-        if (Stream.of(request.accountName(), request.accountType(),request.userGuid()).anyMatch(Objects::isNull)) {
+        if (Stream.of(request.accountName(), request.accountType(), request.userGuid()).anyMatch(Objects::isNull)) {
             throw new InvalidRequestException("Mandatory fields can't be empty");
         }
     }

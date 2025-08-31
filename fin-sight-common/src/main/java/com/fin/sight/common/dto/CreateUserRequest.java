@@ -13,4 +13,6 @@ public class CreateUserRequest {
     private int age;
     private String password;
     private String googleOAuthToken;
+    private String userGuid;
+    private String thirdPartyUserId;
 }

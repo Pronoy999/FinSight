@@ -14,11 +14,9 @@ import com.fin.sight.common.utils.Validator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Objects;
 
 @RestController("userController")
@@ -34,20 +32,17 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createUser(@RequestBody CreateUserRequest request) {
+    public ResponseEntity<?> createUser(@RequestBody CreateUserRequest request, @RequestHeader Map<String, String> requestHeaders) {
         try {
+            String apiToken = requestHeaders.get(Constants.X_API_KEY);
             Validator.validateUserRegisterDetails(request);
-            CreateUserResponse response = userService.registerUser(request);
-            if (Objects.nonNull(response)) {
-                return ResponseGenerator.generateUserRegisterResponse(response.guid(), response.jwt());
-            }
-            return ResponseGenerator.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Something went wrong");
+            return userService.registerUser(request, apiToken);
         } catch (InvalidRequestException e) {
             log.error("Error while registering user: ", e);
             return ResponseGenerator.generateFailureResponse(HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (InvalidTokenException e) {
-            log.error("Invalid Google Token", e);
-            return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Invalid Google OAuth token");
+            log.error("Invalid X-API-KEY", e);
+            return ResponseGenerator.generateFailureResponse(HttpStatus.UNAUTHORIZED, "Invalid X-API-KEY");
         } catch (Exception e) {
             return ResponseGenerator.generateFailureResponse(HttpStatus.INTERNAL_SERVER_ERROR, Constants.GENERIC_ERROR_MESSAGE);
         }
